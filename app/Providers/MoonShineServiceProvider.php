@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Models\Cart;
 use App\Models\CartStatus;
+use App\Models\Coupon;
 use App\Models\MysteryBox;
 use App\Models\MysteryBoxParticipant;
 use App\Models\Order;
@@ -15,6 +16,7 @@ use App\Models\ProductCategory;
 use App\Models\User;
 use App\MoonShine\Resources\CartResource;
 use App\MoonShine\Resources\CartStatusResource;
+use App\MoonShine\Resources\CouponResource;
 use App\MoonShine\Resources\MysteryBoxParticipantResource;
 use App\MoonShine\Resources\MysteryBoxResource;
 use App\MoonShine\Resources\OrderResource;
@@ -70,6 +72,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
                 MenuItem::make('Участники', new MysteryBoxParticipantResource())->icon('heroicons.outline.users')->badge(fn() => MysteryBoxParticipant::query()->count()),
             ]),
             MenuGroup::make('Заказы', [
+                MenuItem::make('Купоны', new CouponResource())->icon('heroicons.outline.receipt-percent')->badge(fn() => Coupon::query()->count()),
                 MenuItem::make('Статус корзины', new CartStatusResource())->icon('heroicons.outline.chart-bar')->badge(fn() => CartStatus::query()->count()),
                 MenuItem::make('Корзина', new CartResource())->icon('heroicons.outline.shopping-bag')->badge(fn() => Cart::query()->count()),
                 MenuItem::make('Заказ', new OrderResource())->icon('heroicons.outline.gift')->badge(fn() => Order::query()->count()),

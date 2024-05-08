@@ -46,20 +46,19 @@ class User extends Authenticatable
     ];
 
     public function winners() {
-
         return $this->hasMany(MysteryBox::class, 'winner_id');
-
     }
 
     public function carts() {
-
         return $this->hasMany(Cart::class, 'user_id');
-
     }
 
     public function participants() {
-
         return $this->hasMany(MysteryBoxParticipant::class, 'participant_id');
+    }
 
+    public function referrals()
+    {
+        return $this->hasMany(UserReferral::class, 'user_id');
     }
 }

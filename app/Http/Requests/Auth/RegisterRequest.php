@@ -29,6 +29,7 @@ class RegisterRequest extends FormRequest
             'email_confirmation' => 'required',
             'password' => ['required', 'string', 'max:255', 'confirmed', Password::defaults()],
             'password_confirmation' => 'required|string',
+            'referral' => 'nullable|string',
         ];
     }
 }

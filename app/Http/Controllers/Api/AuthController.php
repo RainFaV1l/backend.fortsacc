@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\UserReferral;
 use Illuminate\Support\Facades\DB;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -14,16 +15,31 @@ class AuthController extends Controller
 {
     function register(RegisterRequest $request)
     {
-
         $token = DB::transaction(function () use ($request) {
 
             $data = $request->validated();
+
+            $referral = $data['referral'] ?? null;
+
+            unset($data['referral']);
 
             $user = User::query()->create($data);
 
             $user->update([
                 'referral_link' => Hashids::encode($user->id)
             ]);
+
+            if(!is_null($referral)) {
+
+                $referrer = User::query()->where('referral_link', $referral)->firstOrFail();
+
+                UserReferral::query()->create([
+                    'referral_id' => $user->id,
+                    'user_id' => $referrer->id,
+                    'referral_code' => $referral,
+                ]);
+
+            }
 
             return $user->createToken($data['first_name'])->plainTextToken;
 
