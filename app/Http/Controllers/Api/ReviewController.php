@@ -14,7 +14,7 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        $reviews = Review::query()->where('isPublished', true)->get();
+        $reviews = Review::query()->where('isPublished', true)->paginate(16);
 
         return ReviewResource::collection($reviews);
     }
@@ -25,6 +25,8 @@ class ReviewController extends Controller
     public function store(ReviewRequest $request)
     {
         $data = $request->validated();
+
+        if(!is_null(request()->user())) $data['user_id'] = request()->user()->id;
 
         $review = Review::query()->create($data);
 

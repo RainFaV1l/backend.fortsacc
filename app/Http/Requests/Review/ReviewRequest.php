@@ -24,20 +24,6 @@ class ReviewRequest extends FormRequest
         return [
             'full_name' => 'required|string|max:255',
             'message' => 'required|string|max:255',
-            'rating' => 'required|integer|max:5|min:1',
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function messages(): array
-    {
-        return [
-            'required' => 'Это поле должно быть заполнено',
-            'string' => 'Поле должно быть строкой',
-            'max' => 'Максимальное кол-во символов: 255',
-            'integer' => 'Поле должно быть целочисленным значением',
         ];
     }
 }

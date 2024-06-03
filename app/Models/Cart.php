@@ -14,12 +14,10 @@ class Cart extends Model
         'user_id',
         'status_id',
         'total',
-        'fio',
-        'tel',
+        'first_name',
+        'last_name',
         'email',
-        'height',
-        'city',
-        'promotional_code',
+        'coupon_id',
     ];
 
     protected $hidden = [
@@ -42,7 +40,7 @@ class Cart extends Model
     public function status(): BelongsTo
     {
 
-        return $this->belongsTo(CartStatus::class, 'status_id', 'id');
+        return $this->belongsTo(CartStatus::class, 'cart_statuses_id', 'id');
 
     }
 
@@ -63,6 +61,16 @@ class Cart extends Model
     {
 
         return $this->belongsToMany(Product::class, 'orders', 'cart_id', 'product_id');
+
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function coupon(): \Illuminate\Database\Eloquent\Relations\belongsTo
+    {
+
+        return $this->belongsTo(Coupon::class, 'coupon_id');
 
     }
 }

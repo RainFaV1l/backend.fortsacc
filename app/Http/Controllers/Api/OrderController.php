@@ -5,14 +5,30 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Resources\CartResource;
+use App\Http\Resources\OrderResource;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
+use App\Repositories\Interfaces\OrderRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
+    private OrderRepositoryInterface $orderRepository;
+
+    public function __construct(OrderRepositoryInterface $orderRepository)
+    {
+        $this->orderRepository = $orderRepository;
+    }
+
+    public function index()
+    {
+        $orders = Order::query()->where('user_id', request()->user()->id)->get();
+
+        return CartResource::collection($orders);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -20,38 +36,13 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
-        $products = collect($data['products']);
+        $data = $this->orderRepository->createOrder($data);
 
-        unset($data['products']);
+        if(isset($data['token'])) return response()->json([
+            'token' => $data['token'],
+            'cart' => new CartResource($data['cart']),
+        ]);
 
-        $total = $products->sum(function (array $product) {
-
-            $productPrice = Product::query()->findOrFail($product['id']);
-
-            return $productPrice['price'] * $product['count'];
-
-        });
-
-        $data['total'] = $total;
-
-        $cart = DB::transaction(function () use ($request, $data, $products) {
-
-            $cart = Cart::query()->create($data);
-
-            $products->each(function (array $product, int $key) use ($cart) {
-                Order::query()->create([
-                    'cart_id' => $cart->id,
-                    'product_id' => $product['id'],
-                    'count' => $product['count'],
-                ]);
-            });
-
-            return $cart;
-
-        }, 3);
-
-//        Mail::to($data['email'])->send(new \App\Mail\Order($cart, 'успешно оформлен. Ожидайте модерацию администратором.', 'Оформление заказа'));
-
-        return new CartResource($cart);
+        else return new CartResource($data);
     }
 }

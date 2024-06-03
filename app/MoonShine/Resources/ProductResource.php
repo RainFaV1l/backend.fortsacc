@@ -51,7 +51,7 @@ class ProductResource extends ModelResource
                 Text::make('Игра', 'game'),
                 Text::make('Почта', 'mail'),
                 Number::make('Цена', 'price')->sortable()->showOnExport(),
-                Text::make('Валюта', 'currency')->sortable()->showOnExport(),
+                // Text::make('Валюта', 'currency')->sortable()->showOnExport(),
                 Image::make('Превью', 'preview')->disk('local')->dir('/public/products')->showOnExport(),
                 BelongsTo::make('Категория', 'category', resource: new ProductCategoryResource())->required()->searchable()->showOnExport(),
                 Text::make('Дата изменения', 'updated_at')->sortable()->showOnExport()->hideOnForm()->hideOnIndex(),
@@ -65,9 +65,9 @@ class ProductResource extends ModelResource
     {
         return [
             'name' => 'required|string|max:255',
-            'short_description' => 'nullable|string|max:500',
-            'description' => 'nullable|string|max:2000',
-            'stock' => 'nullable|int',
+            'short_description' => 'required|string|max:500',
+            'description' => 'required|string|max:2000',
+            'stock' => 'nullable|int|max:1000000',
             'delivery' => 'nullable|string|max:255',
             'game' => 'nullable|string|max:255',
             'mail' => 'nullable|string|max:255',

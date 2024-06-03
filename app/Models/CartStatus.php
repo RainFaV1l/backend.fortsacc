@@ -14,6 +14,6 @@ class CartStatus extends Model
     ];
 
     public function carts() {
-        return $this->belongsTo(Cart::class, 'status_id', 'id');
+        return $this->belongsTo(Cart::class, 'cart_statuses_id', 'id');
     }
 }
