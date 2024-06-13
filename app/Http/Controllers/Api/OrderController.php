@@ -10,6 +10,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\Interfaces\OrderRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,14 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::query()->where('user_id', request()->user()->id)->get();
+        $orders = Cart::query()->where('user_id', auth('sanctum')->user()->id)->get();
+
+        return CartResource::collection($orders);
+    }
+
+    public function lastOrders()
+    {
+        $orders = Cart::query()->where('user_id', auth('sanctum')->user()->id)->orderByDesc('created_at')->take(3)->get();
 
         return CartResource::collection($orders);
     }
@@ -32,11 +40,21 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $storeRequest)
     {
-        $data = $request->validated();
+        $data = $storeRequest->validated();
 
-        $data = $this->orderRepository->createOrder($data);
+        if(!is_null(auth('sanctum')->user())) {
+
+            $user = auth('sanctum')->user();
+
+            $data = $this->orderRepository->createOrder($data, $user);
+
+        } else {
+
+            $data = $this->orderRepository->createOrder($data);
+
+        }
 
         if(isset($data['token'])) return response()->json([
             'token' => $data['token'],

@@ -15,11 +15,11 @@ class PopularResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->product->id,
-            'name' => $this->product->name,
-            'price' => $this->product->price,
-            'currency' => $this->product->currency,
-            'preview_image' => $this->product->getPreviewImagePath(),
+            'id' => $this->popularProduct->id,
+            'name' => $this->popularProduct->name,
+            'price' => $this->popularProduct->price,
+            'currency' => $this->popularProduct->currency,
+            'preview_image' => $this->popularProduct->getPreviewImagePath(),
         ];
     }
 }

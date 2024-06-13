@@ -15,6 +15,7 @@ use App\Models\Order;
 use App\Models\PopularProduct;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\RelatedNews;
 use App\Models\Review;
 use App\Models\SliderProduct;
 use App\Models\User;
@@ -29,6 +30,7 @@ use App\MoonShine\Resources\OrderResource;
 use App\MoonShine\Resources\PopularProductResource;
 use App\MoonShine\Resources\ProductCategoryResource;
 use App\MoonShine\Resources\ProductResource;
+use App\MoonShine\Resources\RelatedNewsResource;
 use App\MoonShine\Resources\ReviewResource;
 use App\MoonShine\Resources\SliderResource;
 use App\MoonShine\Resources\UserResource;
@@ -74,6 +76,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             MenuGroup::make('Новости', [
                 MenuItem::make('Категории', new NewsCategoryResource())->icon('heroicons.outline.tag')->badge(fn() => NewsCategory::query()->count()),
                 MenuItem::make('Новости', new NewsResource())->icon('heroicons.outline.newspaper')->badge(fn() => News::query()->count()),
+                MenuItem::make('Связанные новости', new RelatedNewsResource())->icon('heroicons.outline.clipboard-document-list')->badge(fn() => RelatedNews::query()->count()),
             ]),
             MenuGroup::make('Пользователи', [
                 MenuItem::make('Пользователь', new UserResource())->icon('heroicons.outline.user')->badge(fn() => User::query()->count()),

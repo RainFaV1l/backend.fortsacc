@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mystery_boxes', function (Blueprint $table) {
+        Schema::create('mystery_box_fakes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->foreignId('winner_id')->nullable()->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('expired_at')->nullable();
+            $table->string('nickname');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mystery_boxes');
+        Schema::dropIfExists('mystery_box_fakes');
     }
 };

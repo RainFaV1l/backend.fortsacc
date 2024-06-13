@@ -8,6 +8,7 @@ use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Notifications\OrderCreated;
 use App\Repositories\Interfaces\OrderRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -34,7 +35,7 @@ class OrderRepository implements OrderRepositoryInterface
             'password' => $password,
         ]);
 
-        Mail::to($user->email)->send(new SendPassword($password));
+        Mail::to($user->email)->send((new SendPassword($password))->afterCommit());
 
         return $user;
     }
@@ -46,17 +47,23 @@ class OrderRepository implements OrderRepositoryInterface
         return $price * ((100 - $coupon->percent) / 100);
     }
 
-    public function createOrder(array $data): array|null
+    public function createOrder(array $data, $user = null)
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $user) {
 
-            if(!is_null(request()->user())) $user = request()->user();
+            $userCreated = null;
 
-            else $user = $this->createUser($data);
+            if(is_null($user)) {
 
-            $this->generateReferralLink($user);
+                $user = $this->createUser($data);
 
-            $data['user_id'] = $user->id;
+                $this->generateReferralLink($user);
+
+                $userCreated = true;
+
+            }
+
+            $data['user_id'] = $user['id'];
 
             $products = collect($data['products']);
 
@@ -70,7 +77,9 @@ class OrderRepository implements OrderRepositoryInterface
 
             $this->storeProducts($products, $cart);
 
-            if(!is_null(request()->user())) return $cart;
+            $user->notify((new OrderCreated($data))->afterCommit());
+
+            if(is_null($userCreated)) return $cart;
 
             else return [
                 'cart' => $cart,

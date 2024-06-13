@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Scout\Searchable;
 
 class PopularProduct extends Model
 {
@@ -17,7 +18,7 @@ class PopularProduct extends Model
 
     public function product() {
 
-        return $this->belongsTo(Product::class, 'popular_product_id');
+        return $this->belongsTo(Product::class, 'product_id');
 
     }
 

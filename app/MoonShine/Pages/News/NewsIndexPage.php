@@ -7,6 +7,7 @@ namespace App\MoonShine\Pages\News;
 use App\MoonShine\Resources\NewsCategoryResource;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Number;
 use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
@@ -22,7 +23,8 @@ class NewsIndexPage extends IndexPage
             Text::make('Название', 'name')->sortable(),
             Switcher::make('Опубликован', 'isPublished'),
             Image::make('Изображение', 'path')->dir('news')->disk('public'),
-            BelongsTo::make('Категория', 'category', resource: new NewsCategoryResource())->required()->searchable()->showOnExport()
+            BelongsTo::make('Категория', 'category', resource: new NewsCategoryResource())->required()->searchable()->showOnExport(),
+            Number::make('Время чтения', 'reading_time')->sortable()->nullable()->showOnExport(),
         ];
     }
 

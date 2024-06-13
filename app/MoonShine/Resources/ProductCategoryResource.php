@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\ProductCategory;
 
 use MoonShine\Fields\Text;
+use MoonShine\Fields\TinyMce;
 use MoonShine\Resources\ModelResource;
 use MoonShine\Decorations\Block;
 use MoonShine\Fields\Date;
@@ -29,7 +30,7 @@ class ProductCategoryResource extends ModelResource
         return [
             Block::make([
                 ID::make()->sortable()->showOnExport(),
-                Text::make('Название', 'name')->sortable()->showOnExport(),
+                TinyMce::make('Название', 'name')->sortable()->showOnExport(),
                 Text::make('Дата изменения', 'updated_at')->sortable()->showOnExport()->hideOnForm(),
                 Text::make('Дата создания', 'created_at')->sortable()->showOnExport()->hideOnForm(),
             ]),

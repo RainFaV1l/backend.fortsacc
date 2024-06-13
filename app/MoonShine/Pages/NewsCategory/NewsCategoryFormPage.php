@@ -6,6 +6,7 @@ namespace App\MoonShine\Pages\NewsCategory;
 
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
+use MoonShine\Fields\TinyMce;
 use MoonShine\Pages\Crud\FormPage;
 
 class NewsCategoryFormPage extends FormPage
@@ -14,7 +15,7 @@ class NewsCategoryFormPage extends FormPage
     {
         return [
             ID::make()->sortable(),
-            Text::make('Название', 'name')->sortable(),
+            TinyMce::make('Название', 'name')->sortable(),
         ];
     }
 

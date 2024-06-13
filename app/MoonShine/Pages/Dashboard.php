@@ -43,15 +43,15 @@ class Dashboard extends Page
                    Block::make([
                        LineChartMetric::make('Заказы')
                            ->line([
-                               'Profit' => Cart::query()
-                                   ->selectRaw('SUM(total) as sum, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
+                               'Прибыль' => Cart::query()
+                                   ->selectRaw('ROUND(SUM(total)) as sum, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
                                    ->groupBy('date')
-                                   ->pluck('total','date')
+                                   ->pluck('sum','date')
                                    ->toArray(),
-                               'Avg' => Cart::query()
-                                   ->selectRaw('AVG(total) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
+                               'В среднем' => Cart::query()
+                                   ->selectRaw('ROUND(AVG(total)) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
                                    ->groupBy('date')
-                                   ->pluck('total','date')
+                                   ->pluck('avg','date')
                                    ->toArray()
                            ],[
                                'red', 'blue'

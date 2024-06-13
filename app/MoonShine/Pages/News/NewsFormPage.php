@@ -7,6 +7,7 @@ namespace App\MoonShine\Pages\News;
 use App\MoonShine\Resources\NewsCategoryResource;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Number;
 use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Switcher;
 use MoonShine\Fields\Text;
@@ -19,9 +20,10 @@ class NewsFormPage extends FormPage
     {
         return [
             ID::make()->sortable(),
-            Text::make('Название', 'name')->sortable()->required(),
+            TinyMce::make('Название', 'name')->sortable()->required(),
             TinyMce::make('Описание', 'description')->required(),
             Switcher::make('Опубликован', 'isPublished'),
+            Number::make('Время чтения', 'reading_time')->sortable()->nullable()->showOnExport(),
             Image::make('Изображение', 'path')->dir('news')->disk('public'),
             BelongsTo::make('Категория', 'category', resource: new NewsCategoryResource())->required()->searchable()->showOnExport()
         ];

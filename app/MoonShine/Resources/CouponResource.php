@@ -39,7 +39,7 @@ class CouponResource extends ModelResource
         return [
             'name' => 'required|string|max:255|unique:coupons,name',
             'percent' => 'required|integer|max:100|min:1',
-            'expired_at' => 'nullable|date',
+            'expired_at' => 'required|date',
         ];
     }
 }

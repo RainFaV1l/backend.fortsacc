@@ -14,6 +14,7 @@ use MoonShine\Fields\Date;
 use MoonShine\Fields\DateRange;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Image;
+use MoonShine\Fields\Number;
 use MoonShine\Fields\RangeSlider;
 use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Switcher;
@@ -61,6 +62,7 @@ class NewsResource extends ModelResource
         {
             return [
                 'name' => 'required|string|max:255',
+                'reading_time' => 'nullable|integer',
                 'description' => 'required|string|nullable',
                 'isPublished' => 'required|boolean',
                 'path' => [$item->exists ? 'sometimes' : 'required', 'image'],
@@ -72,8 +74,9 @@ class NewsResource extends ModelResource
     {
         return [
             ID::make()->sortable()->showOnExport(),
-            Text::make('Название', 'name')->sortable()->required()->showOnExport(),
-            TinyMce::make('Описание', 'description')->required()->showOnExport(),
+            TinyMce::make('Название', 'name')->sortable()->required()->showOnExport(),
+            Text::make('Описание', 'description')->required()->showOnExport(),
+            Number::make('Время чтения', 'reading_time')->nullable()->showOnExport(),
             Switcher::make('Опубликован', 'isPublished')->required()->showOnExport(),
             Image::make('Изображение', 'path')->dir('news')->disk('public'),
             BelongsTo::make('Категория', 'category', resource: new NewsCategoryResource())->required()->searchable()->showOnExport()
@@ -91,6 +94,8 @@ class NewsResource extends ModelResource
     {
         return [
             BelongsTo::make('Категория', 'category', resource: new NewsCategoryResource())->searchable()->nullable(),
+
+            Number::make('Время чтения', 'reading_time')->nullable()->showOnExport(),
 
             DateRange::make('Дата создания', 'created_at')->nullable(),
 

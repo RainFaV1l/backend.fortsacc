@@ -27,7 +27,6 @@ class ProductResource extends JsonResource
             'currency' => $this->currency,
             'preview_image' => $this->getPreviewImagePath(),
             'category' => new CategoryResource($this->category),
-//            'images' => ImageResource::collection($this->images),
             'popular' => $this->popular,
             'populars' => PopularResource::collection($this->populars),
         ];

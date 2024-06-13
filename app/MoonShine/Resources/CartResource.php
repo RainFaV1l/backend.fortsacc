@@ -28,7 +28,7 @@ class CartResource extends ModelResource
         return [
             Block::make([
                 ID::make()->sortable()->showOnExport(),
-                BelongsTo::make('Пользователь', 'user')->searchable()->showOnExport(),
+                BelongsTo::make('Пользователь', 'user', fn($item) => $item->first_name)->searchable()->showOnExport(),
                 BelongsTo::make('Статус', 'status', resource: new CartStatusResource())->searchable()->showOnExport(),
                 Text::make('Итоговая сумма', 'total')->showOnExport(),
                 Text::make('Дата изменения', 'updated_at')->sortable()->showOnExport()->hideOnIndex()->hideOnForm(),

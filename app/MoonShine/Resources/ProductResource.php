@@ -43,8 +43,8 @@ class ProductResource extends ModelResource
         return [
             Block::make([
                 ID::make()->sortable()->showOnExport(),
-                Text::make('Название', 'name')->showOnExport(),
-                Text::make('Краткое описание', 'short_description')->showOnExport()->hideOnIndex(),
+                TinyMce::make('Название', 'name')->showOnExport(),
+                TinyMce::make('Краткое описание', 'short_description')->showOnExport()->hideOnIndex(),
                 TinyMce::make('Описание', 'description')->showOnExport()->hideOnIndex(),
                 Number::make('Количество', 'stock'),
                 Text::make('Доставка', 'delivery'),

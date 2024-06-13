@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mystery_boxes', function (Blueprint $table) {
+        Schema::create('related_news', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->foreignId('winner_id')->nullable()->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('expired_at')->nullable();
+            $table->foreignId('news_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('related_news_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mystery_boxes');
+        Schema::dropIfExists('related_news');
     }
 };
